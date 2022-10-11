@@ -1,0 +1,186 @@
+openapi: 3.0.3
+
+info:
+  title: Kie Server with Drools - OpenAPI 3.0
+  description:  Hola!
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: e.garciacaleramolina@um.es
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+servers:
+  - url: http://localhost:8180/kie-server/services/rest/server
+  - url: http://192.168.7.3:8080/kie-server/services/rest/server
+tags:
+  - name: Kie Server
+    description: Everything about Kie Server
+    externalDocs:
+      description: Find out more
+      url: https://docs.drools.org/7.73.0.Final/drools-docs/html_single/
+paths:
+  /containers:
+    get:
+      tags:
+        - containers
+      summary: List containers
+      description: List containers
+      operationId: listContainers
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Containers'
+            application/xml:
+              schema:
+                  $ref: '#/components/schemas/Containers'
+        '400':
+          description: Invalid status value
+      security:
+        - basic_auth: []
+        
+  /containers/{containerId}:
+    get:
+      tags:
+        - container
+      summary: Find pet by ID
+      description: Returns a single pet
+      operationId: getPetById
+      parameters:
+        - name: containerId
+          in: path
+          description: ID of container
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Container'
+            application/xml:
+              schema:
+                  $ref: '#/components/schemas/Container'
+        '400':
+          description: bad :(
+        '404':
+          description: bad :(
+      security:
+        - basic_auth: []
+
+components:
+
+  securitySchemes:
+    basic_auth:
+      type: http
+      scheme: basic
+      
+  schemas:
+    Container_info:
+      type: object
+      properties:
+        container-id:
+          type: string
+          example: Test_1.0.0-SNAPSHOT
+        release_id:
+          type: object
+          properties:
+            group-id:
+              type: string
+              example: com.myspace
+            artifact-id:
+              type: string
+              example: Test
+            version:
+              type: string
+              example: 1.0.0-SNAPSHOT
+        resolved_release_id:
+          type: object
+          properties:
+            group-id:
+              type: string
+              example: com.myspace
+            artifact-id:
+              type: string
+              example: Test
+            version:
+              type: string
+              example: 1.0.0-SNAPSHOT
+        status:
+          type: string
+          example: DEACTIVATED
+        scanner:
+          type: object
+          properties:
+            status:
+              type: string
+              example: DISPOSED
+            poll-interval:
+              type: object
+              example: null
+        config-items:
+          type: object
+          example: []
+        messages:
+          type: array
+          items:
+            type: object
+            properties:
+              severity:
+                type: string
+                example: INFO
+              timestamp:
+                type: object
+                properties:
+                  java.util.Date: 
+                    type: integer
+                    example: 1665474265532
+              content:
+                type: array
+                items: 
+                  type: string
+                  example: "Container Test_1.0.0-SNAPSHOT deactivated successfully."
+        container-alias:
+          type: string
+          example: Test
+          
+    Container:
+      type: object
+      properties:
+        type:
+          type: string
+          example: SUCESS
+        msg:
+          type: string
+          example: "Info for container Test_1.0.0-SNAPSHOT"
+        result:
+          type: object
+          properties:
+            kie-container:
+              $ref: '#/components/schemas/Container_info'  
+              
+    Containers:
+      type: object
+      properties:
+        type:
+          type: string
+          example: SUCESS
+        msg:
+          type: string
+          example: "Info for container Test_1.0.0-SNAPSHOT"
+        result:
+          type: object
+          properties:
+            kie-containers:
+              type: object
+              properties:
+                kie-container:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Container_info'  
+                

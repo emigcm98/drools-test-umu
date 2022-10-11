@@ -23,6 +23,19 @@ services:
       internal:
         ipv4_address: 192.168.7.2
 
+  swagger:
+    image: swaggerapi/swagger-editor
+    ports:
+      - "55555:8080"
+    container_name: swagger
+    environment:
+      - SWAGGER_FILE=./doc/doc.yaml
+    networks:
+      internal:
+        ipv4_address: 192.168.7.4
+
+
+
 networks:
   internal:
     driver: bridge

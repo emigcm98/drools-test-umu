@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<container-spec-details>
+    <container-id>hello</container-id>
+    <container-name>hello</container-name>
+    <release-id>
+        <artifact-id>Test</artifact-id>
+        <group-id>com.myspace</group-id>
+        <version>1.1</version>
+    </release-id>
+    <configs>
+        <entry>
+            <key>RULE</key>
+            <value xsi:type="ruleConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <scannerStatus>STOPPED</scannerStatus>
+            </value>
+        </entry>
+        <entry>
+            <key>PROCESS</key>
+            <value xsi:type="processConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <runtimeStrategy>SINGLETON</runtimeStrategy>
+                <kbase></kbase>
+                <ksession></ksession>
+                <mergeMode>MERGE_COLLECTIONS</mergeMode>
+            </value>
+        </entry>
+    </configs>
+    <status>STARTED</status>
+</container-spec-details>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <container-spec-details>
-    <container-id>hello</container-id>
-    <container-name>hello</container-name>
+    <container-id>hello1</container-id>
+    <container-name>hello1</container-name>
     <release-id>
         <artifact-id>Test</artifact-id>
         <group-id>com.myspace</group-id>
-        <version>1.1</version>
+        <version>1.0.0-SNAPSHOT</version>
     </release-id>
     <configs>
         <entry>

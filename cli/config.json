@@ -1,0 +1,7 @@
+{
+	"KIE_SERVER_HOST": "localhost",
+	"KIE_SERVER_PORT": 8180,
+	"KIE_SERVER_NAMESPACE": "kie-server",
+	"KIE_SERVER_USER": "kieserver",
+	"KIE_SERVER_PWD": "kieserver1!"
+}

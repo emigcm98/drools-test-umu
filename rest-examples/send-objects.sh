@@ -1,10 +1,9 @@
 #!/bin/bash
-
-echo "curl --location --request POST 'http://localhost:8180/kie-server/services/rest/server/containers/instances/Test_1.0.0-SNAPSHOT' \
--u 'admin:admin' \
+curl --location --request POST 'http://localhost:8180/kie-server/services/rest/server/containers/instances/Test_1.0.0-SNAPSHOT' \
+--header 'Authorization: Basic YWRtaW46YWRtaW4=' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-   "commands": [                                                                                                                              [149/367]
+    "commands": [
         {
             "insert": {
                 "object": {
@@ -48,4 +47,4 @@ echo "curl --location --request POST 'http://localhost:8180/kie-server/services/
             }
         }
     ]
-}'"
+}'

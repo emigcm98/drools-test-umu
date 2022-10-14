@@ -4,17 +4,6 @@ MAINTAINER "Emilio García de la Calera" "e.garciacaleramolina@um.es"
 
 ## ENVIRONMENT ##
 
-ENV KIE_SERVER_LOCATION http://192.168.7.3:8080/kie-server/services/rest/server
-ENV KIE_SERVER_USER kieserver
-ENV KIE_SERVER_PWD kieserver1!
-
-ENV KIE_SERVER_CONTROLLER http://192.168.7.2:8080/business-central/rest/controller
-ENV KIE_SERVER_CONTROLLER_USER admin
-ENV KIE_SERVER_CONTROLLER_PWD admin
-
-ENV KIE_MAVEN_REPO http://192.168.7.2:8080/business-central/maven2
-ENV KIE_MAVEN_REPO_USER admin
-ENV KIE_MAVEN_REPO_PASSWORD admin
 ENV JAVA_OPTS -Xms256m -Xmx1024m -Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8 -Dorg.jbpm.server.ext.disabled=true -Dorg.jbpm.ui.server.ext.disabled=true -Dorg.optaplanner.server.ext.disabled=true -Dorg.kie.executor.disabled=true
 
 ## CUSTOM CONFIGURATION ##

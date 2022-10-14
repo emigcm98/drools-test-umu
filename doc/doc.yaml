@@ -15,7 +15,7 @@ servers:
   - url: http://192.168.7.3:8080/kie-server/services/rest/server
 tags:
   - name: Kie Server
-    description: Everything about Kie Server
+    description: Everything about Kie Server API REST
     externalDocs:
       description: Find out more
       url: https://docs.drools.org/7.73.0.Final/drools-docs/html_single/
@@ -45,7 +45,7 @@ paths:
   /containers/{containerId}:
     get:
       tags:
-        - container
+        - containers
       summary: Find pet by ID
       description: Returns a single pet
       operationId: getPetById

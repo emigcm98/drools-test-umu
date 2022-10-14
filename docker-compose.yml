@@ -1,46 +1,26 @@
-version: "3"
+version: '3'
 
 services:
-
-  kie-server:
-    image: kie-server-umu
-    build: ./kie-server
-    ports:
-      - "8180:8080"
-    container_name: kie-server
-    networks:
-      internal:
-        ipv4_address: 192.168.7.3
-
-  business-central: 
-    image: business-central-umu
+  business-central:
     build: ./business-central
+    image: business-central-xd
     ports:
-      - "8080:8080"
-      - "8001:8001"
-    container_name: drools-workbench
-    networks:
-      internal:
-        ipv4_address: 192.168.7.2
-
-  swagger:
-    image: swaggerapi/swagger-editor
-    ports:
-      - "55555:8080"
-    container_name: swagger
+    - 8080:8080
+    - 8001:8001
+  kie-server:
+    build: ./kie-server
+    image: kie-server
     environment:
-      - SWAGGER_FILE=./doc/doc.yaml
-    networks:
-      internal:
-        ipv4_address: 192.168.7.4
-
-
-
-networks:
-  internal:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 192.168.7.0/24
-          gateway: 192.168.7.1 
-
+      KIE_SERVER_LOCATION: http://kie-server:8080/kie-server/services/rest/server
+      KIE_SERVER_CONTROLLER: http://business-central:8080/business-central/rest/controller
+      KIE_MAVEN_REPO: http://business-central:8080/business-central/maven2
+      KIE_MAVEN_REPO_USER: admin
+      KIE_MAVEN_REPO_PWD: admin
+      KIE_SERVER_PWD: kieserver1!
+      KIE_SERVER_USER: kieserver
+      KIE_SERVER_CONTROLLER_USER: admin
+      KIE_SERVER_CONTROLLER_PWD: admin
+    ports:
+      - 8180:8080
+    depends_on:
+      - business-central

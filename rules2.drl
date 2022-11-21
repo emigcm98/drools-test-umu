@@ -1,0 +1,151 @@
+package com.myspace.test;
+
+rule 'not_ok'
+    salience 2
+    when
+        $ip: ImportProduct( status!="OK" )
+    then
+        delete( $ip );
+end
+
+rule "average"
+    salience 1
+    when 
+       $categories: Object() from accumulate(ip: ImportProduct(); 
+                             collectSet(ip.getCategory()))
+       $category: String() from $categories
+       accumulate(ip : ImportProduct(category == $category);
+            $avgPrice: average(ip.getPrice()));
+    then
+        System.out.println("Category "+$category);
+        System.out.println("Price "+$avgPrice);
+        System.out.println("-------------------");
+end
+
+rule "Hello World"
+  when
+    m : Message( message : message, status == Message.HELLO )
+  then
+    System.out.println( m.getMessage() );
+    //modify ( $m ) { m.setMessage("Goodbye cruel world"), m.setStatus(Message.GOODBYE) };
+end
+
+rule 'verify_id_conflicts'
+    when
+        $mspl1 : mspl()
+        $mspl2 : mspl( id == $mspl1.id )
+    then
+        System.out.println( "ID Conflict!" );
+        
+end
+
+rule 'verify_same_filtering_l4_behaviour'
+    when
+        $mspl1 : mspl()
+        $mspl2 : mspl( id != $mspl1.id && ( configuration.capability.name==$mspl1.configuration.capability.name && configuration.capability.name.equals("Filtering_L4") ) && 
+        configuration.configurationRule.configurationRuleAction.FilteringActionType==$mspl1.configuration.configurationRule.configurationRuleAction.FilteringActionType && 
+        configuration.configurationRule.configurationCondition.packetFilterCondition.sourceAddress==$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.sourceAddress &&
+        configuration.configurationRule.configurationCondition.packetFilterCondition.destinationAddress==$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.destinationAddress &&
+        configuration.configurationRule.configurationCondition.packetFilterCondition.sourcePort==$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.sourcePort &&
+        configuration.configurationRule.configurationCondition.packetFilterCondition.destinationPort==$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.destinationPort &&
+        configuration.configurationRule.configurationCondition.packetFilterCondition.deviceInterface==$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.deviceInterface &&
+        configuration.configurationRule.configurationCondition.packetFilterCondition.protocolType==$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.protocolType)
+    then
+        System.out.println( "Same L4 Behaviour " + $mspl1.id + " and " + $mspl2.id );
+
+end
+
+rule 'verify_managers_conflict_l4_behaviour'
+    when
+        $mspl1 : mspl()
+        $mspl2 : mspl( ( configuration.capability.name==$mspl1.configuration.capability.name && configuration.capability.name.equals("Filtering_L4") ) &&
+        configuration.configurationRule.configurationRuleAction.FilteringActionType == "ALLOW" &&
+		$mspl1.configuration.configurationRule.configurationRuleAction.FilteringActionType == "DENY" &&
+        configuration.configurationRule.configurationRuleAction.FilteringActionType==$mspl1.configuration.configurationRule.configurationRuleAction.FilteringActionType && 
+        configuration.configurationRule.configurationCondition.packetFilterCondition.sourceAddress==$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.sourceAddress &&
+        configuration.configurationRule.configurationCondition.packetFilterCondition.destinationAddress==$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.destinationAddress &&
+        configuration.configurationRule.configurationCondition.packetFilterCondition.sourcePort==$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.sourcePort &&
+        configuration.configurationRule.configurationCondition.packetFilterCondition.destinationPort==$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.destinationPort &&
+        configuration.configurationRule.configurationCondition.packetFilterCondition.deviceInterface==$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.deviceInterface &&
+        configuration.configurationRule.configurationCondition.packetFilterCondition.protocolType==$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.protocolType)
+    then
+         System.out.println( "Managers Conflict! " + $mspl1.id + " and " + $mspl2.id );
+end
+
+rule 'verify_managers_conflict_traffic_divert_behavior'
+    when
+        $mspl1 : mspl()
+        $mspl2 : mspl( $mspl1.configuration.capability.name=="Traffic_Divert" && configuration.capability.name=="Filtering_L4" &&
+        $mspl1.priority==priority &&
+        configuration.configurationRule.configurationRuleAction.trafficDivertActionType == "FORWARD" &&
+		$mspl1.configuration.configurationRule.configurationRuleAction.FilteringActionType == "DENY" &&
+        configuration.configurationRule.configurationRuleAction.FilteringActionType==$mspl1.configuration.configurationRule.configurationRuleAction.FilteringActionType && 
+        configuration.configurationRule.configurationCondition.packetFilterCondition.sourceAddress==$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.sourceAddress &&
+        configuration.configurationRule.configurationRuleAction.packetDivertAction.packetFilterCondition.destinationAddress==$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.destinationAddress &&
+        configuration.configurationRule.configurationCondition.packetFilterCondition.sourcePort==$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.sourcePort &&
+        configuration.configurationRule.configurationCondition.packetFilterCondition.destinationPort==$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.destinationPort &&
+        configuration.configurationRule.configurationCondition.packetFilterCondition.deviceInterface==$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.deviceInterface &&
+        configuration.configurationRule.configurationCondition.packetFilterCondition.protocolType==$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.protocolType)
+    then
+        System.out.println( "Managers Conflict! " + $mspl1.id + " and " + $mspl2.id );
+end
+
+rule 'verify_duties_conflict'
+    when
+        $mspl1 : mspl()
+        $mspl2 : mspl($mspl1.configuration.capability.name != configuration.capability.name &&
+		$mspl1.configuration.capability.name == "DTLS_protocol" &&
+		configuration.capability.name == "Network_traffic_analysis" &&
+		$mspl1.configuration.configurationRule.configurationRuleAction.technologyActionParameters.technologyParameter.localEndpoint == configuration.configurationRule.configurationCondition.monitoringConfigurationCondition.packetFilterCondition.SourceAddress &&
+		$mspl1.configuration.configurationRule.configurationRuleAction.technologyActionParameters.technologyParameter.remoteEndpoint == configuration.configurationRule.configurationCondition.monitoringConfigurationCondition.packetFilterCondition.DestinationAddress)
+    then
+        System.out.println( "Duties Conflict! " + $mspl1.id + " and " + $mspl2.id );
+end
+
+rule 'verify_priority_dependency'
+    when
+        $mspl1 : mspl()
+        $mspl2 : mspl($mspl1.priority > priority &&
+		$mspl1.dependencies.dependency.configurationCondition.policyID == id)
+    then
+        System.out.println( "Priority dependency Conflict! " + $mspl1.id + " and " + $mspl2.id );
+end
+
+rule 'verify_dependency'
+    when
+        $mspl1 : mspl()
+        $mspl2 : mspl($mspl1.priority > priority &&
+		$mspl1.dependencies.dependency.configurationCondition.policyID == id &&
+		$mspl1.dependencies.dependency.configurationCondition.status != status)
+    then
+        System.out.println( "Policy dependency! " + $mspl1.id + " and " + $mspl2.id );
+end
+
+rule 'verify_event'
+    when
+        $mspl1 : mspl()
+        $mspl2 : mspl($mspl1.dependencies.dependency.eventId == eventI)
+    then
+        System.out.println( "Priority dependency Conflict! " + $mspl1.id + " and " + $mspl2.id );
+end
+
+
+rule 'verify_override_conflict_l4_behaviour'
+    when
+        $mspl1 : mspl()
+        $mspl2 : mspl($mspl1.id != id &&
+		($mspl1.configuration.capability.name == configuration.capability.name && configuration.capability.name == "Filtering_L4") &&
+		$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.SourceAddress == $mspl2.configuration.configurationRule.configurationCondition.packetFilterCondition.SourceAddress &&
+		$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.DestinationAddress == None &&
+		$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.SourcePort == None &&
+		$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.DestinationPort == None &&
+		$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.Interface == None &&
+		$mspl1.configuration.configurationRule.configurationCondition.packetFilterCondition.ProtocolType == None)
+    then
+        System.out.println( "Override Conflict! " + $mspl1.id + " and " + $mspl2.id );
+    
+end
+
+
+
+

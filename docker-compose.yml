@@ -22,5 +22,17 @@ services:
       KIE_SERVER_CONTROLLER_PWD: admin
     ports:
       - 8180:8080
+   #depends_on:
+     #- business-central
+
+  drools-cli-umu:
+    build: ./testSpringBoot
+    image: drools-cli-umu
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    container_name: drools-cli-umu
+    ports:
+      - 9090:8080
     depends_on:
-      - business-central
+      - kie-server
+

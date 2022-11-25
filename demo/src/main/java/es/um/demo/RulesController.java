@@ -33,7 +33,7 @@ public class RulesController {
     
     @PostMapping("/rules")
     public String rules(@RequestBody Item item) {
-        int fired = this.rulesService.fireRules(item);
+        //int fired = this.rulesService.fireRules(item);
 
         System.out.println(item.toString());
         System.out.println("Number of rules fired" + fired);

@@ -36,3 +36,11 @@ services:
     depends_on:
       - kie-server
 
+  spring-drools:
+    build: ./demo
+    image: spring-drools-umu
+    stdin_open: true
+    tty: true
+    ports:
+      - 6969:8080
+

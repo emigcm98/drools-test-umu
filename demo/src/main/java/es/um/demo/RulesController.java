@@ -36,7 +36,7 @@ public class RulesController {
         //int fired = this.rulesService.fireRules(item);
 
         System.out.println(item.toString());
-        System.out.println("Number of rules fired" + fired);
-        return "Greetings from Spring Boot!";
+       // System.out.println("Number of rules fired" + fired);
+        return item.toString();
     }
 }

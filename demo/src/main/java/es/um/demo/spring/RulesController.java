@@ -39,6 +39,13 @@ public class RulesController {
 
     }
     
+    @GetMapping("/capabilities")
+    public String get_generico() { 
+    	KieServerClient ksc = KieServerClient.getInstance();
+    	String info = ksc.listCapabilities();
+        return info;
+    }
+    
     @GetMapping("/containers")
     public String get_containers() { 
     	KieServerClient ksc = KieServerClient.getInstance();

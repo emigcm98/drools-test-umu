@@ -66,6 +66,7 @@ public class KieServerClient {
 		  return sb.toString();
 		}
 	
+	
 	public String listContainers() {
 	    KieContainerResourceList containersList = kieServicesClient.listContainers().getResult();
 	    List<KieContainerResource> kieContainers = containersList.getContainers();
@@ -78,6 +79,7 @@ public class KieServerClient {
 	    
 	    return sb.toString();
 	}
+
 	
 	public String getContainerById(String id) {
 		

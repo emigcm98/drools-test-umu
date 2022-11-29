@@ -11,7 +11,8 @@ defina las bases de conocimiento ni la relacion entre argumentos, ya que cuando 
 Por lo tanto, cuando llega un fact que contiene un objeto tipo mspl, se dispara el statement visto en el caso anterior mspls.mspl($mspl1,$status1) obteniendo el objeto sobre el que 
 posteriormente se trabaja accediendo a las diferentes variables que contiene el objeto, por ejemplo en check $mspl1.id == $mspl2.id o check $mspl1.configuration.capability[0].Name == $mspl2.configuration.capability[0].Name == "Filtering_L4"
 
-Los facts mspl son del tipo ITResourceType ¿Cuales son los ejemplos de fact que se encuentran en el gitlab? ¿Son los ficheros xml que se pueden ver en la carpeta test?
+Los facts mspl son del tipo ITResourceType. RuleSetConfiguration extiende de configuration. 
+¿Cuales son los ejemplos de fact que se encuentran en el gitlab? ¿Son los ficheros xml que se pueden ver en la carpeta test?
 
 Tomando el xml schema mspl.xsd, se ha convertido la estructura para los objetos mspl a una serie de clases Java, para usarlas en Drools. Esto es así ya que para las reglas de
 Drools si es necesario que esté definido un Data Object para trabajar con ellos en las reglas.

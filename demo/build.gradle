@@ -34,13 +34,28 @@ repositories {
 }
 
 dependencies {
+
+	// spring web
 	implementation("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+	
+	// drools
 	implementation("org.kie:kie-spring:${droolsVersion}")
 	implementation("org.drools:drools-compiler:${droolsVersion}")
-	implementation group: "org.kie", name: "kie-api", version: "7.25.0.Final"
-	implementation group: "org.drools", name: "drools-core", version: "7.25.0.Final"
-	implementation group: "org.drools", name: "drools-compiler", version: "7.25.0.Final"
+	implementation("org.kie.server:kie-server-controller-client:${droolsVersion}")
+	implementation("org.jboss.resteasy:resteasy-client:6.2.1.Final")
+	implementation("org.kie.server:kie-server-client:${droolsVersion}")
+	implementation("org.drools:drools-compiler:${droolsVersion}")
 	//implementation 'org.kie.server:kie-server-services-common:7.25.0.Final'
     //implementation 'org.kie.server:kie-server-services-drools:7.25.0.Final'
     //implementation 'org.kie.server:kie-server-rest-common:7.25.0.Final'
+    
+	// templates spring
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")
+	implementation("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
+	implementation("org.thymeleaf:thymeleaf:3.0.15.RELEASE")
+	implementation("org.thymeleaf:thymeleaf-spring5:3.0.15.RELEASE")
+	
+	implementation group: "org.kie", name: "kie-api", version: "7.25.0.Final"
+	implementation group: "org.drools", name: "drools-core", version: "7.25.0.Final"
+	implementation group: "org.drools", name: "drools-compiler", version: "7.25.0.Final"
 }

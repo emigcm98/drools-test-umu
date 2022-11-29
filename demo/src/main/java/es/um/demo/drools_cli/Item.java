@@ -1,4 +1,4 @@
-package es.um.demo;
+package es.um.demo.drools_cli;
 
 import java.io.Serializable;
 import java.util.Objects;

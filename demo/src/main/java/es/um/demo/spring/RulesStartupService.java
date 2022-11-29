@@ -1,4 +1,4 @@
-package es.um.demo;
+package es.um.demo.spring;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package es.um.demo;
+package es.um.demo.spring;
 
 
 import org.kie.api.KieServices;
@@ -8,6 +8,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import es.um.demo.drools_cli.Item;
 
 /**
  * Singleton class that wraps

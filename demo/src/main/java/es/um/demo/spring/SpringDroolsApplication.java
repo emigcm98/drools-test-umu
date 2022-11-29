@@ -1,4 +1,4 @@
-package es.um.demo;
+package es.um.demo.spring;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

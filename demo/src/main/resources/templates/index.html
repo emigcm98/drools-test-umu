@@ -1,0 +1,8 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<tbody>
+    <tr th:each="mensaje: ${mensajes}">
+        <td th:text="${mensaje.mensaje}" />
+        <td th:text="${mensaje.tipo}" />
+    </tr>
+</tbody>
+</html>

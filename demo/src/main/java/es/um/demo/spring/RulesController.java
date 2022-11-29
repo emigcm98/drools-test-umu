@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.um.demo.drools_cli.Item;
+import es.um.demo.drools_cli.KieServerClient;
 import es.um.demo.drools_cli.Mensaje;
 
 @RestController
@@ -22,7 +23,10 @@ public class RulesController {
 
     @Autowired
     RulesService rulesService;
-
+    
+   
+    
+    
     @GetMapping("/")
     public String index(Model modelo) {
 
@@ -36,9 +40,10 @@ public class RulesController {
     }
     
     @GetMapping("/containers")
-    public String get_containers() {
-    	// mirar templates para devolver hrefs
-        return "Contenedor concreto!";
+    public String get_containers() { 
+    	KieServerClient ksc = KieServerClient.getInstance();
+    	String info = ksc.listContainers();
+        return info;
     }
     
     @GetMapping("/containers/{id}")

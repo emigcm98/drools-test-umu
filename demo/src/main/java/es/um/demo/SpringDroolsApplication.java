@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 
+import es.um.demo.drools_cli.KieServerClient;
+
 @SpringBootApplication
 @ComponentScan("es.um")
 //@EntityScan("es.um.demo")

@@ -1,12 +1,14 @@
 version: '3'
 
 services:
+
   business-central:
     build: ./business-central
     image: business-central-xd
     ports:
     - 8080:8080
     - 8001:8001
+
   kie-server:
     build: ./kie-server
     image: kie-server
@@ -22,19 +24,6 @@ services:
       KIE_SERVER_CONTROLLER_PWD: admin
     ports:
       - 8180:8080
-   #depends_on:
-     #- business-central
-
-  drools-cli-umu:
-    build: ./testSpringBoot
-    image: drools-cli-umu
-    stdin_open: true # docker run -i
-    tty: true        # docker run -t
-    container_name: drools-cli-umu
-    ports:
-      - 9090:8080
-    depends_on:
-      - kie-server
 
   spring-drools:
     build: ./demo
@@ -42,5 +31,8 @@ services:
     stdin_open: true
     tty: true
     ports:
-      - 6969:8080
+      - 9898:9898
+    depends_on:
+      - kie-server
+      - business-central
 

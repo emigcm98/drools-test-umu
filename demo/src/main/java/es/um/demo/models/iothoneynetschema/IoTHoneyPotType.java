@@ -6,7 +6,7 @@
 //
 
 
-package org.example.iothoneynetschema;
+package es.um.demo.models.iothoneynetschema;
 
 import java.util.ArrayList;
 import java.util.List;

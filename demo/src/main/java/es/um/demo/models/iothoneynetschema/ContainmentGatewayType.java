@@ -6,7 +6,8 @@
 //
 
 
-package org.example.iothoneynetschema;
+//package org.example.iothoneynetschema;
+package es.um.demo.models.iothoneynetschema;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

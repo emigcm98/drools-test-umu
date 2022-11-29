@@ -6,7 +6,7 @@
 //
 
 
-package org.example.iothoneynetschema;
+package es.um.demo.models.iothoneynetschema;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;

@@ -6,4 +6,4 @@
 //
 
 @javax.xml.bind.annotation.XmlSchema(namespace = "http://www.example.org/IoTHoneynetSchema", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
-package org.example.iothoneynetschema;
+package es.um.demo.models.iothoneynetschema;

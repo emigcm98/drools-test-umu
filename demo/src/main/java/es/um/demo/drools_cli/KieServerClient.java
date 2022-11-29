@@ -1,15 +1,21 @@
 package es.um.demo.drools_cli;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.kie.server.api.marshalling.MarshallingFormat;
 import org.kie.server.api.model.KieContainerResource;
 import org.kie.server.api.model.KieContainerResourceList;
 import org.kie.server.api.model.KieServerInfo;
+import org.kie.server.api.model.KieServiceResponse.ResponseType;
 import org.kie.server.api.model.ServiceResponse;
 import org.kie.server.client.KieServicesClient;
 import org.kie.server.client.KieServicesConfiguration;
 import org.kie.server.client.KieServicesFactory;
+
+import es.um.demo.models.data.Container;
+import es.um.demo.models.data.PruebaJSON;
 
 public class KieServerClient {
 
@@ -67,17 +73,55 @@ public class KieServerClient {
 		}
 	
 	
-	public String listContainers() {
+	public PruebaJSON listContainers() {
+		
+		
 	    KieContainerResourceList containersList = kieServicesClient.listContainers().getResult();
 	    List<KieContainerResource> kieContainers = containersList.getContainers();
 	    
-	    StringBuilder sb = new StringBuilder();
-	    
+	    PruebaJSON pj = new PruebaJSON("containers");
+	
 	    for (KieContainerResource container : kieContainers) {
-	        sb.append("\t" + container.getContainerId() + " (" + container.getReleaseId() + ")");
+	        pj.addContainer(new Container(container.getContainerId(), container.getReleaseId().toString()));
 	    }
 	    
-	    return sb.toString();
+	    return pj;
+	}
+	
+	public boolean disposeAndCreateContainer() {
+	    System.out.println("== Disposing and creating containers ==");
+
+	    // Retrieve list of KIE containers
+	    List<KieContainerResource> kieContainers = kieServicesClient.listContainers().getResult().getContainers();
+	    if (kieContainers.size() == 0) {
+	        System.out.println("No containers available...");
+	        return false;
+	    }
+
+	    // Dispose KIE container (el primero)
+	    KieContainerResource container = kieContainers.get(0);
+	    String containerId = container.getContainerId();
+	    ServiceResponse<Void> responseDispose = kieServicesClient.disposeContainer(containerId);
+	    
+	    if (responseDispose.getType() == ResponseType.FAILURE) {
+	        System.out.println("Error disposing " + containerId + ". Message: ");
+	        System.out.println(responseDispose.getMsg());
+	        return false;
+	    }
+	    
+	    System.out.println("Success Disposing container " + containerId);
+	    System.out.println("Trying to recreate the container...");
+
+	    // Re-create KIE container
+	    ServiceResponse<KieContainerResource> createResponse = kieServicesClient.createContainer(containerId, container);
+	    if(createResponse.getType() == ResponseType.FAILURE) {
+	        System.out.println("Error creating " + containerId + ". Message: ");
+	        System.out.println(responseDispose.getMsg());
+	        return false;
+	    }
+	    System.out.println("Container recreated with success!");
+	    
+	    return true;
 	}
 
 	

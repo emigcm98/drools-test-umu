@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import es.um.demo.drools_cli.Item;
 import es.um.demo.drools_cli.KieServerClient;
 import es.um.demo.drools_cli.Mensaje;
+import es.um.demo.models.data.PruebaJSON;
 
 @RestController
+@RequestMapping(path="/", produces="application/json")
 public class RulesController {
 
     @Autowired
@@ -36,7 +38,6 @@ public class RulesController {
     	mensajes.add(new Mensaje("paso", 3));
     	modelo.addAttribute("mensajes", mensajes);
        	return "index";
-
     }
     
     @GetMapping("/capabilities")
@@ -46,27 +47,34 @@ public class RulesController {
         return info;
     }
     
-    @GetMapping("/containers")
-    public String get_containers() { 
+    @RequestMapping("/containers")
+    public PruebaJSON get_containers() { 
     	KieServerClient ksc = KieServerClient.getInstance();
-    	String info = ksc.listContainers();
-        return info;
+        return ksc.listContainers();
     }
+    
+    @RequestMapping("/recreate")
+    public String recreate() { 
+    	KieServerClient ksc = KieServerClient.getInstance();
+    	boolean f = ksc.disposeAndCreateContainer();
+    	String res;
+    	if (f) {
+    		res = "true";
+    	}
+    	else {
+    		res = "false";
+    	}
+    	return res;
+    }
+    
     
     @GetMapping("/containers/{id}")
     public String get_container_id(@PathVariable String id) {
-    	// mirar templates para devolver hrefs
-        return "Contenedor concreto!";
+    	KieServerClient ksc = KieServerClient.getInstance();
+    	String info = ksc.getContainerById(id);
+        return info;
     }
     
-    @GetMapping("/perro/{nombre}")
-	public Map<String, String> perro(@PathVariable String nombre) {
-		
-		HashMap<String, String> map = new HashMap<>();
-		map.put("nombre", nombre);
-		map.put("que eres", "perro");
-		return map;
-	}
 
     // Item como prueba
     @PostMapping("containers/{id}/fact")

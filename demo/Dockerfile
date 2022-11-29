@@ -2,13 +2,10 @@ FROM gradle:7.5-jdk11-alpine
 
 WORKDIR /app
 COPY . .
-EXPOSE 8080
+EXPOSE 9898
 USER root
 RUN chown -R gradle /app
 USER gradle
 
-#RUN ./gradlew build --stacktrace
-
-#CMD ["./gradlew bootRun --info"]
 CMD ["./gradlew", "bootRun", "--info"]
 

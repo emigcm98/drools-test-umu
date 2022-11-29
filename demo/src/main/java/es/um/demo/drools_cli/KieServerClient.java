@@ -13,7 +13,7 @@ import org.kie.server.client.KieServicesFactory;
 
 public class KieServerClient {
 
-	private static final String URL = "http://localhost:8180/kie-server/services/rest/server";
+	private static final String URL = "http://kie-server:8080/kie-server/services/rest/server";
 	private static final String USER = "admin";
 	private static final String PASSWORD = "admin";
 	 

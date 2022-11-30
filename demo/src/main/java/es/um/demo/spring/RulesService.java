@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import es.um.demo.drools_cli.Item;
+import es.um.demo.models.data.Item;
 
 /**
  * Singleton class that wraps

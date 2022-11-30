@@ -20,8 +20,8 @@ import es.um.demo.models.data.PruebaJSON;
 public class KieServerClient {
 
 	private static final String URL = "http://kie-server:8080/kie-server/services/rest/server";
-	private static final String USER = "admin";
-	private static final String PASSWORD = "admin";
+	private static final String USER = "kieserver";
+	private static final String PASSWORD = "kieserver1!";
 	 
 	private static final MarshallingFormat FORMAT = MarshallingFormat.JSON;
 	
@@ -88,18 +88,24 @@ public class KieServerClient {
 	    return pj;
 	}
 	
-	public boolean disposeAndCreateContainer() {
-	    System.out.println("== Disposing and creating containers ==");
+	public boolean disposeAndRecreateContainer(String id) {
 
 	    // Retrieve list of KIE containers
 	    List<KieContainerResource> kieContainers = kieServicesClient.listContainers().getResult().getContainers();
-	    if (kieContainers.size() == 0) {
-	        System.out.println("No containers available...");
+	    if (kieContainers.size() <= 0) {
 	        return false;
 	    }
-
-	    // Dispose KIE container (el primero)
-	    KieContainerResource container = kieContainers.get(0);
+	    
+	    KieContainerResource container = null;
+	    for (KieContainerResource c : kieContainers) {
+	    	if (c.getContainerId() == id) {
+	    		container = c;
+	    	}
+	    }
+	    if (container == null) {
+	    	return false;
+	    }
+	    
 	    String containerId = container.getContainerId();
 	    ServiceResponse<Void> responseDispose = kieServicesClient.disposeContainer(containerId);
 	    
@@ -108,9 +114,6 @@ public class KieServerClient {
 	        System.out.println(responseDispose.getMsg());
 	        return false;
 	    }
-	    
-	    System.out.println("Success Disposing container " + containerId);
-	    System.out.println("Trying to recreate the container...");
 
 	    // Re-create KIE container
 	    ServiceResponse<KieContainerResource> createResponse = kieServicesClient.createContainer(containerId, container);
@@ -119,7 +122,6 @@ public class KieServerClient {
 	        System.out.println(responseDispose.getMsg());
 	        return false;
 	    }
-	    System.out.println("Container recreated with success!");
 	    
 	    return true;
 	}

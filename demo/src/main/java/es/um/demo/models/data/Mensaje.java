@@ -1,4 +1,4 @@
-package es.um.demo.drools_cli;
+package es.um.demo.models.data;
 
 import java.io.Serializable;
 

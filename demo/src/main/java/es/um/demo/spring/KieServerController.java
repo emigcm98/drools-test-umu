@@ -14,31 +14,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import es.um.demo.drools_cli.Item;
 import es.um.demo.drools_cli.KieServerClient;
-import es.um.demo.drools_cli.Mensaje;
+import es.um.demo.models.data.Item;
+import es.um.demo.models.data.Mensaje;
 import es.um.demo.models.data.PruebaJSON;
 
 @RestController
-@RequestMapping(path="/", produces="application/json")
-public class RulesController {
+@RequestMapping(path="/kie", produces="application/json")
+public class KieServerController {
 
     @Autowired
     RulesService rulesService;
     
-   
-    
-    
-    @GetMapping("/")
-    public String index(Model modelo) {
-
-    	List<Mensaje> mensajes = new LinkedList<>();
-    	mensajes.add(new Mensaje("hola", 1));
-    	mensajes.add(new Mensaje("adios", 2));
-    	mensajes.add(new Mensaje("paso", 3));
-    	modelo.addAttribute("mensajes", mensajes);
-       	return "index";
-    }
     
     @GetMapping("/capabilities")
     public String get_generico() { 
@@ -53,10 +40,10 @@ public class RulesController {
         return ksc.listContainers();
     }
     
-    @RequestMapping("/recreate")
-    public String recreate() { 
+    @RequestMapping("/recreate/{id}")
+    public String recreate(@PathVariable String id) { 
     	KieServerClient ksc = KieServerClient.getInstance();
-    	boolean f = ksc.disposeAndCreateContainer();
+    	boolean f = ksc.disposeAndRecreateContainer(id);
     	String res;
     	if (f) {
     		res = "true";

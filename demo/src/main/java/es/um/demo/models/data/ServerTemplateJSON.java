@@ -4,6 +4,9 @@ public class ServerTemplateJSON {
 	private String templateId;
 	private String templateName;
 	
+	public ServerTemplateJSON() {
+	}
+	
 	public ServerTemplateJSON(String templateId, String templateName) {
 		this.templateId = templateId;
 		this.templateName = templateName;

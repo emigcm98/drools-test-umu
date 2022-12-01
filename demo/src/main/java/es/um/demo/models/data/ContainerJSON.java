@@ -14,6 +14,9 @@ public class ContainerJSON {
 	
 	private ServerTemplateJSON serverTemplate;
 	
+	public ContainerJSON() {
+	}
+	
 	public ContainerJSON (String releaseIdgroupId, String releaseIdartifactId,
 				String releaseIdversion, String containerId, String containerName) {
 		this.releaseIdgroupId = releaseIdgroupId;

@@ -16,12 +16,13 @@ import es.um.demo.models.data.ContainerJSON;
 
 public class DroolsClient {
 
-  private static final String URL = "http://business-central:8080/business-central/rest/controller";
-  private static final String USER = "admin";
-  private static final String PASSWORD = "admin";
+	//private static final String URL = "http://business-central:8080/business-central/rest/controller";
+	private static final String URL = "http://localhost:8180/business-central/rest/controller";
+	private static final String USER = "admin";
+	private static final String PASSWORD = "admin";
 
-    private KieServerControllerClient client;
-
+	private KieServerControllerClient client;
+	private static DroolsClient dc;
 //    public static void main(String[] args) {
 //        KieServerControllerClient client = KieServerControllerClientFactory.newRestClient(URL, USER, PASSWORD, MarshallingFormat.JSON);
 //        // Create server template and KIE container, start and stop KIE container, and delete server template
@@ -31,56 +32,85 @@ public class DroolsClient {
 //        client.stopContainer(container);
 //        client.deleteServerTemplate(serverTemplate.getId());
 //    }
-    
-    private static DroolsClient dc;
-    
-	   private DroolsClient() {
+
+	
+
+	private DroolsClient() {
 	      // constructor of the SingletonExample class
-	   }
+		  initialize();
+	}
+	
+	private void initialize() {
+		client = KieServerControllerClientFactory.newRestClient(URL, USER, PASSWORD, MarshallingFormat.JSON);
+	}
 
-	   public static DroolsClient getInstance() {
-	      // write code that allows us to create only one object
-	      // access the object as per our need
-		   if(dc == null) {
-		         dc = new DroolsClient();
-		      }
+	public static DroolsClient getInstance() {
+		// write code that allows us to create only one object
+		// access the object as per our need
+		if (dc == null) {
+			dc = new DroolsClient();
+		}
 
-		       // returns the singleton object
-		       return dc;
-	   }
+		// returns the singleton object
+		return dc;
+	}
 
-    // Re-create and configure server template
-    public ServerTemplate createServerTemplate(String templateId, String templateName) {
-        ServerTemplate serverTemplate = new ServerTemplate();
-        serverTemplate.setId(templateId);
-        serverTemplate.setName(templateName);
-        serverTemplate.setCapabilities(Arrays.asList(Capability.PROCESS.name(), Capability.RULE.name(), Capability.PLANNING.name()));
+	// Re-create and configure server template
+	public ServerTemplate createServerTemplate(String templateId, String templateName) {
+		ServerTemplate serverTemplate = new ServerTemplate();
+		serverTemplate.setId(templateId);
+		serverTemplate.setName(templateName);
+		serverTemplate.setCapabilities(
+				Arrays.asList(Capability.PROCESS.name(), Capability.RULE.name(), Capability.PLANNING.name()));
 
-        client.saveServerTemplate(serverTemplate);
+		client.saveServerTemplate(serverTemplate);
 
-        return serverTemplate;
-    }
+		return serverTemplate;
+	}
 
-    // Re-create and configure KIE containers
-    public boolean createContainer(ContainerJSON containerJSON){
-    	
-        Map<Capability, ContainerConfig> containerConfigMap = new HashMap<>();
+	// Re-create and configure KIE containers
+	public boolean createContainer(ContainerJSON containerJSON) {
 
-        ProcessConfig processConfig = new ProcessConfig("PER_PROCESS_INSTANCE", "kieBase", "kieSession", "MERGE_COLLECTION");
-        containerConfigMap.put(Capability.PROCESS, processConfig);
+		Map<Capability, ContainerConfig> containerConfigMap = new HashMap<>();
 
-        RuleConfig ruleConfig = new RuleConfig(500l, KieScannerStatus.SCANNING);
-        containerConfigMap.put(Capability.RULE, ruleConfig);
+		ProcessConfig processConfig = new ProcessConfig("PER_PROCESS_INSTANCE", "kieBase", "kieSession",
+				"MERGE_COLLECTION");
+		containerConfigMap.put(Capability.PROCESS, processConfig);
 
-        //ReleaseId releaseId = new ReleaseId("org.kie.server.testing", "stateless-session-kjar", "1.0.0-SNAPSHOT");
-        ReleaseId releaseId = new ReleaseId(containerJSON.getReleaseIdgroupId(), containerJSON.getReleaseIdartifactId(), containerJSON.getReleaseIdversion());
-        
-        //ContainerSpec containerSpec = new ContainerSpec("example-container-id", "example-client-name", serverTemplate, releaseId, KieContainerStatus.STOPPED, containerConfigMap);
-        ServerTemplate st = new ServerTemplate(containerJSON.getServerTemplate().getTemplateId(), containerJSON.getServerTemplate().getTemplateName());
-        ContainerSpec containerSpec = new ContainerSpec(containerJSON.getContainerId(), containerJSON.getContainerName(), st, releaseId, KieContainerStatus.STOPPED, containerConfigMap);
-        client.saveContainerSpec(st.getId(), containerSpec);
+		RuleConfig ruleConfig = new RuleConfig(500l, KieScannerStatus.SCANNING);
+		containerConfigMap.put(Capability.RULE, ruleConfig);
 
-        //return containerSpec;
-        return true;
-    }
+		// ReleaseId releaseId = new ReleaseId("org.kie.server.testing",
+		// "stateless-session-kjar", "1.0.0-SNAPSHOT");
+		ReleaseId releaseId = new ReleaseId(containerJSON.getReleaseIdgroupId(), containerJSON.getReleaseIdartifactId(),
+				containerJSON.getReleaseIdversion());
+
+		// ContainerSpec containerSpec = new ContainerSpec("example-container-id",
+		// "example-client-name", serverTemplate, releaseId, KieContainerStatus.STOPPED,
+		// containerConfigMap);
+		ServerTemplate st = new ServerTemplate(containerJSON.getServerTemplate().getTemplateId(),
+				containerJSON.getServerTemplate().getTemplateName());
+		ContainerSpec containerSpec = new ContainerSpec(containerJSON.getContainerId(),
+				containerJSON.getContainerName(), st, releaseId, KieContainerStatus.STOPPED, containerConfigMap);
+		client.saveContainerSpec(st.getId(), containerSpec);
+
+		// return containerSpec;
+		return true;
+	}
+	
+	public boolean startContainer(String templateId, String containerId) {
+		
+		ContainerSpec container = client.getContainerInfo(templateId, containerId);
+		client.startContainer(container);
+		
+		return true;
+	}
+	
+	public boolean stopContainer(String templateId, String containerId) {
+		
+		ContainerSpec container = client.getContainerInfo(templateId, containerId);
+		client.stopContainer(container);
+		
+		return true;
+	}
 }

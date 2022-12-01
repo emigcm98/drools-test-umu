@@ -1,6 +1,7 @@
 package es.um.demo.drools_cli;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import org.kie.server.client.KieServicesClient;
 import org.kie.server.client.KieServicesConfiguration;
 import org.kie.server.client.KieServicesFactory;
 
+import es.um.demo.models.data.CapabilitiesJSON;
 import es.um.demo.models.data.Container;
 import es.um.demo.models.data.PruebaJSON;
 
@@ -23,7 +25,6 @@ public class KieServerClient {
 	private static final String USER = "kieserver";
 	private static final String PASSWORD = "kieserver1!";
 	 
-	private static final MarshallingFormat FORMAT = MarshallingFormat.JSON;
 	
 	private static KieServicesConfiguration conf;
 	private static KieServicesClient kieServicesClient;
@@ -54,22 +55,24 @@ public class KieServerClient {
 	    //extraClassList.add(Obj.class);
 	    //conf.addExtraClasses(extraClassList);
 
-	    conf.setMarshallingFormat(FORMAT);
+	    conf.setMarshallingFormat(MarshallingFormat.JSON);
 	    kieServicesClient = KieServicesFactory.newKieServicesClient(conf);
 	}
 	
-	public String listCapabilities() {
+	public CapabilitiesJSON listCapabilities() {
 
 		  KieServerInfo serverInfo = kieServicesClient.getServerInfo().getResult();
 		  
-		  StringBuilder sb = new StringBuilder();
-		  //System.out.print("Server capabilities:");
+		  List<String> capabilities = new LinkedList<>();
 
 		  for (String capability : serverInfo.getCapabilities()) {
-		   sb.append(capability + "\n");
+			  capabilities.add(capability);
 		  }
 		  
-		  return sb.toString();
+		  CapabilitiesJSON cj = new CapabilitiesJSON();
+		  cj.setCapabilities(capabilities);
+		  
+		  return cj;
 		}
 	
 	

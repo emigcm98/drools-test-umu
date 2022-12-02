@@ -69,6 +69,24 @@ public class DroolsController {
     public StatusMessage stopContainer(@PathParam String templateId, @PathParam String containerId) {
     	
     	DroolsClient dc = DroolsClient.getInstance();
+    	boolean res = dc.stopContainer(templateId, containerId);
+    	
+    	StatusMessage sm = new StatusMessage();
+    	sm.setMessage("Stop container");
+    	if (res) {
+    		sm.setStatus("OK");
+    	}
+    	else {
+    		sm.setStatus("FAIL");
+    	}
+    	
+    	return sm;
+    }
+    
+    @GetMapping("container/{templateid}/{containerid}/start")
+    public StatusMessage startContainer(@PathParam String templateId, @PathParam String containerId) {
+    	
+    	DroolsClient dc = DroolsClient.getInstance();
     	boolean res = dc.startContainer(templateId, containerId);
     	
     	StatusMessage sm = new StatusMessage();

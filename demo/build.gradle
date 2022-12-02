@@ -42,7 +42,7 @@ dependencies {
 	implementation("org.kie:kie-spring:${droolsVersion}")
 	implementation("org.drools:drools-compiler:${droolsVersion}")
 	implementation("org.kie.server:kie-server-controller-client:${droolsVersion}")
-	implementation("org.jboss.resteasy:resteasy-client:6.2.1.Final")
+	implementation("org.jboss.resteasy:resteasy-client:4.7.5.Final")
 	implementation("org.kie.server:kie-server-client:${droolsVersion}")
 	implementation("org.drools:drools-compiler:${droolsVersion}")
 	

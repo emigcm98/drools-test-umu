@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.um.demo.drools_cli.DroolsClient;
+import es.um.demo.models.data.CapabilitiesJSON;
 import es.um.demo.models.data.ContainerJSON;
 import es.um.demo.models.data.ServerTemplateJSON;
 import es.um.demo.models.data.StatusMessage;
@@ -23,7 +24,7 @@ public class DroolsController {
     @GetMapping("container/create")
     public ContainerJSON get_container_id() {
     	ContainerJSON cj = new ContainerJSON("es.um.testing", "prueba", "1.0.1-SNAPSHOT", "testing-container-id", "testing-container");
-        cj.setServerTemplate(new ServerTemplateJSON("template-id", "template-name"));
+        //cj.setServerTemplate(new ServerTemplateJSON("template-id", "template-name"));
     	return cj;
     }
     
@@ -99,6 +100,22 @@ public class DroolsController {
     	}
     	
     	return sm;
+    }
+    
+    @GetMapping("templates")
+    public CapabilitiesJSON getTemplates() {
+    	
+    	DroolsClient dc = DroolsClient.getInstance();
+    	
+    	return dc.getTemplates();
+    }
+    
+    @GetMapping("servers")
+    public CapabilitiesJSON getServerInstances() {
+    	
+    	DroolsClient dc = DroolsClient.getInstance();
+    	
+    	return dc.getServerInstances();
     }
 
 }

@@ -2,16 +2,21 @@ package es.um.demo.drools_cli;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.kie.server.api.marshalling.MarshallingFormat;
 import org.kie.server.api.model.KieContainerStatus;
 import org.kie.server.api.model.KieScannerStatus;
 import org.kie.server.api.model.ReleaseId;
+import org.kie.server.controller.api.model.runtime.ServerInstanceKey;
+import org.kie.server.controller.api.model.runtime.ServerInstanceKeyList;
 import org.kie.server.controller.api.model.spec.*;
 import org.kie.server.controller.client.KieServerControllerClient;
 import org.kie.server.controller.client.KieServerControllerClientFactory;
 
+import es.um.demo.models.data.CapabilitiesJSON;
 import es.um.demo.models.data.ContainerJSON;
 import es.um.demo.models.data.ServerTemplateJSON;
 
@@ -24,6 +29,8 @@ public class DroolsClient {
 
 	private static KieServerControllerClient client;
 	private static DroolsClient dc;
+	
+	private static String templateIdDefault;
 //    public static void main(String[] args) {
 //        KieServerControllerClient client = KieServerControllerClientFactory.newRestClient(URL, USER, PASSWORD, MarshallingFormat.JSON);
 //        // Create server template and KIE container, start and stop KIE container, and delete server template
@@ -43,6 +50,7 @@ public class DroolsClient {
 	
 	private void initialize() {
 		client = KieServerControllerClientFactory.newRestClient(URL, USER, PASSWORD, MarshallingFormat.JSON);
+		templateIdDefault = client.listServerTemplates().getServerTemplates()[0].getId();
 	}
 
 	public static DroolsClient getInstance() {
@@ -95,7 +103,7 @@ public class DroolsClient {
 //		ServerTemplate st = new ServerTemplate(containerJSON.getServerTemplate().getTemplateId(),
 //				containerJSON.getServerTemplate().getTemplateName());
 		
-		ServerTemplate st = client.getServerTemplate(containerJSON.getServerTemplate().getTemplateId());
+		ServerTemplate st = client.getServerTemplate(templateIdDefault);
 		if (st == null) {
 			return false;
 		}
@@ -109,10 +117,42 @@ public class DroolsClient {
 		return true;
 	}
 	
+	public CapabilitiesJSON getTemplates() {
+		
+		final ServerTemplateList serverTemplateList = client.listServerTemplates();
+		
+		CapabilitiesJSON cj = new CapabilitiesJSON();
+		List<String> templateIds = new LinkedList<>();
+		
+        for (ServerTemplate st : serverTemplateList.getServerTemplates()) {
+        	templateIds.add(st.getId());
+        }
+        cj.setCapabilities(templateIds);
+        
+        return cj;
+	}
+	
+	public CapabilitiesJSON getServerInstances() {
+		
+		ServerInstanceKeyList instances = client.getServerInstances(templateIdDefault);
+		
+		CapabilitiesJSON cj = new CapabilitiesJSON();
+		List<String> serverIds = new LinkedList<>();
+		
+		for (ServerInstanceKey instance : instances.getServerInstanceKeys()) {
+			serverIds.add(instance.getServerName() + " | " + instance.getServerTemplateId());
+		}
+		
+		cj.setCapabilities(serverIds);
+		
+		return cj;
+	}
+	
 	public boolean startContainer(String templateId, String containerId) {
 		
 		ContainerSpec container = client.getContainerInfo(templateId, containerId);
 		client.startContainer(container);
+		
 		
 		return true;
 	}
@@ -124,4 +164,6 @@ public class DroolsClient {
 		
 		return true;
 	}
+	
+	
 }

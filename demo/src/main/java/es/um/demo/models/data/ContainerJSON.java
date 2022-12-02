@@ -12,7 +12,7 @@ public class ContainerJSON {
 	private String containerId;
 	private String containerName;
 	
-	private ServerTemplateJSON serverTemplate;
+	//private ServerTemplateJSON serverTemplate;
 	
 	public ContainerJSON() {
 	}
@@ -66,11 +66,11 @@ public class ContainerJSON {
 		this.containerName = containerName;
 	}
 
-	public ServerTemplateJSON getServerTemplate() {
-		return serverTemplate;
-	}
-
-	public void setServerTemplate(ServerTemplateJSON serverTemplate) {
-		this.serverTemplate = serverTemplate;
-	}
+//	public ServerTemplateJSON getServerTemplate() {
+//		return serverTemplate;
+//	}
+//
+//	public void setServerTemplate(ServerTemplateJSON serverTemplate) {
+//		this.serverTemplate = serverTemplate;
+//	}
 }

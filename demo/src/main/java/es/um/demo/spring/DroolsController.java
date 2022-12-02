@@ -46,6 +46,25 @@ public class DroolsController {
     	return sm;
     }
     
+    
+    @PostMapping("template/create")
+    public StatusMessage createTemplate(@RequestBody ServerTemplateJSON st) {
+        
+    	DroolsClient dc = DroolsClient.getInstance();
+    	boolean res = dc.createServerTemplate(st);
+    	
+    	StatusMessage sm = new StatusMessage();
+    	sm.setMessage("Create container");
+    	if (res) {
+    		sm.setStatus("OK");
+    	}
+    	else {
+    		sm.setStatus("FAIL");
+    	}
+    	
+    	return sm;
+    }
+    
     @GetMapping("container/{templateid}/{containerid}/stop")
     public StatusMessage stopContainer(@PathParam String templateId, @PathParam String containerId) {
     	

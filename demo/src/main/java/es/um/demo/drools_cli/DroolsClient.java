@@ -13,15 +13,16 @@ import org.kie.server.controller.client.KieServerControllerClient;
 import org.kie.server.controller.client.KieServerControllerClientFactory;
 
 import es.um.demo.models.data.ContainerJSON;
+import es.um.demo.models.data.ServerTemplateJSON;
 
 public class DroolsClient {
 
 	//private static final String URL = "http://business-central:8080/business-central/rest/controller";
-	private static final String URL = "http://localhost:8180/business-central/rest/controller";
+	private static final String URL = "http://localhost:8080/business-central/rest/controller";
 	private static final String USER = "admin";
 	private static final String PASSWORD = "admin";
 
-	private KieServerControllerClient client;
+	private static KieServerControllerClient client;
 	private static DroolsClient dc;
 //    public static void main(String[] args) {
 //        KieServerControllerClient client = KieServerControllerClientFactory.newRestClient(URL, USER, PASSWORD, MarshallingFormat.JSON);
@@ -56,7 +57,10 @@ public class DroolsClient {
 	}
 
 	// Re-create and configure server template
-	public ServerTemplate createServerTemplate(String templateId, String templateName) {
+	public boolean createServerTemplate(ServerTemplateJSON st) {
+		
+		String templateId = st.getTemplateId();
+		String templateName = st.getTemplateName();
 		ServerTemplate serverTemplate = new ServerTemplate();
 		serverTemplate.setId(templateId);
 		serverTemplate.setName(templateName);
@@ -65,7 +69,7 @@ public class DroolsClient {
 
 		client.saveServerTemplate(serverTemplate);
 
-		return serverTemplate;
+		return true;
 	}
 
 	// Re-create and configure KIE containers
@@ -88,10 +92,17 @@ public class DroolsClient {
 		// ContainerSpec containerSpec = new ContainerSpec("example-container-id",
 		// "example-client-name", serverTemplate, releaseId, KieContainerStatus.STOPPED,
 		// containerConfigMap);
-		ServerTemplate st = new ServerTemplate(containerJSON.getServerTemplate().getTemplateId(),
-				containerJSON.getServerTemplate().getTemplateName());
+//		ServerTemplate st = new ServerTemplate(containerJSON.getServerTemplate().getTemplateId(),
+//				containerJSON.getServerTemplate().getTemplateName());
+		
+		ServerTemplate st = client.getServerTemplate(containerJSON.getServerTemplate().getTemplateId());
+		if (st == null) {
+			return false;
+		}
+		
 		ContainerSpec containerSpec = new ContainerSpec(containerJSON.getContainerId(),
 				containerJSON.getContainerName(), st, releaseId, KieContainerStatus.STOPPED, containerConfigMap);
+		
 		client.saveContainerSpec(st.getId(), containerSpec);
 
 		// return containerSpec;

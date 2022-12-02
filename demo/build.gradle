@@ -46,7 +46,7 @@ dependencies {
 	implementation("org.kie.server:kie-server-client:${droolsVersion}")
 	implementation("org.drools:drools-compiler:${droolsVersion}")
 	
-	implementation("org.glassfish.jersey.core:jersey-client:3.1.0")
+	//implementation("org.glassfish.jersey.core:jersey-client:3.1.0")
 	//implementation 'org.kie.server:kie-server-services-common:7.25.0.Final'
     //implementation 'org.kie.server:kie-server-services-drools:7.25.0.Final'
     //implementation 'org.kie.server:kie-server-rest-common:7.25.0.Final'

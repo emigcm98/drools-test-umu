@@ -1,6 +1,7 @@
 package es.um.demo.spring;
 
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import es.um.demo.drools_cli.DroolsClient;
 import es.um.demo.models.data.CapabilitiesJSON;
 import es.um.demo.models.data.ContainerJSON;
+import es.um.demo.models.data.DroolsShop;
 import es.um.demo.models.data.ServerTemplateJSON;
 import es.um.demo.models.data.StatusMessage;
 
@@ -20,6 +22,8 @@ public class DroolsController {
 
 	@Autowired
     RulesService rulesService;
+	
+	private final String KSESSION_NAME = "ksession-rules";
  
     @GetMapping("container/create")
     public ContainerJSON get_container_id() {
@@ -116,6 +120,26 @@ public class DroolsController {
     	DroolsClient dc = DroolsClient.getInstance();
     	
     	return dc.getServerInstances();
+    }
+    
+    // prueba
+    @GetMapping("launch/container/{templateid}/{containerid}")
+    public StatusMessage launchRules(@PathParam String templateId, @PathParam String containerId) {
+    	
+    	DroolsClient dc = DroolsClient.getInstance();
+    	boolean res = dc.launch(templateId, containerId);
+    	
+    	StatusMessage sm = new StatusMessage();
+    	sm.setMessage("Launch rules!");
+    	if (res) {
+    		sm.setStatus("OK");
+    	}
+    	else {
+    		sm.setStatus("FAIL");
+    	}
+    	
+    	return sm;
+    	
     }
 
 }

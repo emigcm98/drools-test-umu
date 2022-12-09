@@ -7,35 +7,16 @@ import org.kie.api.runtime.rule.FactHandle;
 
 public class DroolsShop {
 
-	public static final void main(String[] args) {
+//	public static final void main(String[] args) {
+//
+//		// no entiendo
+//		KieContainer kc = KieServices.Factory.get().getKieClasspathContainer();
+//
+//		System.out.println(kc.verify().getMessages().toString());
+//		execute(kc);
+//	}
 
-		// no entiendo
-		KieContainer kc = KieServices.Factory.get().getKieClasspathContainer();
-
-		System.out.println(kc.verify().getMessages().toString());
-		execute(kc);
-	}
-
-	public static void execute(KieContainer kc) {
-		KieSession ksession = kc.newKieSession("ksession-rules");
-		
-		Customer mark = new Customer("mark", 0);
-		ksession.insert(mark);
-		Product shoes = new Product("shoes", 60);
-		ksession.insert(shoes);
-		Product hat = new Product("hat", 60);
-		ksession.insert(hat);
-		
-		ksession.insert(new Purchase(mark, shoes));
-		FactHandle hatPurchaseHandle = ksession.insert(new Purchase(mark, hat));
-		
-		ksession.fireAllRules();
-		ksession.delete(hatPurchaseHandle);
-		
-		System.out.println("Customer mark has returned the hat");
-		
-		ksession.fireAllRules();
-	}
+	
 
 	public static class Customer {
 		

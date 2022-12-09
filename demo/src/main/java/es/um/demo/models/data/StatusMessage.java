@@ -6,6 +6,7 @@ import lombok.Data;
 public class StatusMessage {
 	private String message;
 	private String status;
+	private String stacktrace;
 	
 	public StatusMessage() {
 	}
@@ -24,6 +25,14 @@ public class StatusMessage {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	
+	public String getStacktrace() {
+		return stacktrace;
+	}
+
+	public void setStacktrace(String stacktrace) {
+		this.stacktrace = stacktrace;
 	}
 	
 }

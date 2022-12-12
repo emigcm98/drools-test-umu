@@ -12,9 +12,12 @@ import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.FactHandle;
 import org.kie.server.api.marshalling.MarshallingFormat;
+import org.kie.server.api.model.KieContainerResource;
 import org.kie.server.api.model.KieContainerStatus;
 import org.kie.server.api.model.KieScannerStatus;
 import org.kie.server.api.model.ReleaseId;
+import org.kie.server.api.model.ServiceResponse;
+import org.kie.server.api.model.KieServiceResponse.ResponseType;
 import org.kie.server.controller.api.KieServerController;
 import org.kie.server.controller.api.model.runtime.ServerInstanceKey;
 import org.kie.server.controller.api.model.runtime.ServerInstanceKeyList;
@@ -175,22 +178,20 @@ public class DroolsClient {
 
 	// public static void launch(KieContainer kc) {
 	public boolean launch(String templateId, String containerId) {
-		
+
 //		KieServices kieServices = KieServices.Factory.get();
 //		KieBaseModel kbm = kieServices.newKieModuleModel().newKieBaseModel()
 //				.addPackage("es.um.demo.rules");
 		ContainerSpec container = null;
 		try {
 			container = client.getContainerInfo(templateId, containerId);
-		}
-		catch (KieServerControllerHTTPClientException e) {
+		} catch (KieServerControllerHTTPClientException e) {
 			return false;
 		}
-		
-		
-		KieContainer kc = KieServices.Factory.get().newKieContainer(containerId, container.getReleasedId());
-		
-		
+
+		KieServices kieServices = KieServices.Factory.get();
+		KieContainer kc = kieServices.newKieContainer(containerId, container.getReleasedId());
+
 		KieSession ksession = kc.newKieSession("ksession-rules");
 
 		Customer mark = new Customer("mark", 0);
@@ -209,7 +210,53 @@ public class DroolsClient {
 		System.out.println("Customer mark has returned the hat");
 
 		ksession.fireAllRules();
+
+		return true;
+	}
+
+	public boolean sayHelloWorld() {
+
+//		KieServices ks = KieServices.Factory.get();
+//		KieContainer kc = ks.getKieClasspathContainer();
+//		System.out.println(kc);
+//		
+//		KieSession ksession = kc.newKieSession("HelloWorldKS");
+
+//		KieContainerResource kcr = new KieContainerResource(new ReleaseId("es.um.demo", "helloworld", "1.0.1"));
+//		kcr.setContainerAlias("helloworld!");
+
+		ServerTemplate st = client.getServerTemplate(templateIdDefault);
+		if (st == null) {
+			return false;
+		}
 		
+		Map<Capability, ContainerConfig> containerConfigMap = new HashMap<>();
+
+		ProcessConfig processConfig = new ProcessConfig("PER_PROCESS_INSTANCE", "kieBase", "kieSession",
+				"MERGE_COLLECTION");
+		containerConfigMap.put(Capability.PROCESS, processConfig);
+
+		RuleConfig ruleConfig = new RuleConfig(500l, KieScannerStatus.SCANNING);
+		containerConfigMap.put(Capability.RULE, ruleConfig);
+		
+
+		ContainerSpec containerSpec = new ContainerSpec("helloworld-id", "helloworld!", st,
+				new ReleaseId("es.um.demo", "helloworld", "1.0.2"), KieContainerStatus.STOPPED, containerConfigMap);
+
+		client.saveContainerSpec(st.getId(), containerSpec);
+		//client.activateContainer(containerSpec);
+
+//		ServiceResponse<KieContainerResource> sr =client.createContainer("helloworld-id", kcr);
+//		if (sr.getType() == ResponseType.SUCCESS) {
+//			return true;
+//		} else {
+//			System.out.println(sr.getMsg());
+//			return false;
+//		}
+		return true;
+	}
+	
+	public boolean listContainerSpecs() {
 		return true;
 	}
 

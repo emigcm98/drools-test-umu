@@ -19,6 +19,7 @@ import es.um.demo.models.data.CapabilitiesJSON;
 import es.um.demo.models.data.Item;
 import es.um.demo.models.data.Mensaje;
 import es.um.demo.models.data.PruebaJSON;
+import es.um.demo.models.data.StatusMessage;
 
 @RestController
 @RequestMapping(value="/kie", produces="application/json")
@@ -27,34 +28,45 @@ public class KieServerController {
     @Autowired
     RulesService rulesService;
     
-    
+    /*
+     * GET Kie Server capabilities
+     */
     @GetMapping("/capabilities")
     public CapabilitiesJSON get_generico() { 
     	KieServerClient ksc = KieServerClient.getInstance();
         return ksc.listCapabilities();
     }
     
+    /*
+     * GET Kie Server contianers
+     */
     @GetMapping("/containers")
     public PruebaJSON get_containers() { 
     	KieServerClient ksc = KieServerClient.getInstance();
         return ksc.listContainers();
     }
     
+    /*
+     * Recreate container from a given ID in url
+     */
     @GetMapping("/recreate/{id}")
-    public String recreate(@PathVariable String id) { 
+    public StatusMessage recreate(@PathVariable String id) { 
     	KieServerClient ksc = KieServerClient.getInstance();
-    	boolean f = ksc.disposeAndRecreateContainer(id);
-    	String res;
-    	if (f) {
-    		res = "true";
+    	boolean res = ksc.disposeAndRecreateContainer(id);
+    	StatusMessage sm = new StatusMessage();
+    	sm.setMessage("Recreating container" + id);
+    	if (res) {
+    		sm.setStatus("OK");
     	}
     	else {
-    		res = "false";
+    		sm.setStatus("FAIL");
     	}
-    	return res;
+    	return sm;
     }
     
-    
+    /*
+     * GET info from container from a given ID in url
+     */
     @GetMapping("/containers/{id}")
     public String get_container_id(@PathVariable String id) {
     	KieServerClient ksc = KieServerClient.getInstance();
@@ -62,8 +74,9 @@ public class KieServerController {
         return info;
     }
     
-
-    // Item como prueba
+    /*
+     * POST a fact (in JSON) in a given container
+     */
     @PostMapping("containers/{id}/fact")
     public String rules(@PathVariable String id, @RequestBody Item item) {
         //int fired = this.rulesService.fireRules(item);
@@ -71,5 +84,20 @@ public class KieServerController {
         System.out.println(item.toString());
        // System.out.println("Number of rules fired" + fired);
         return item.toString();
+    }
+    
+    @GetMapping("helloworld")
+    public StatusMessage helloworld() {
+    	KieServerClient ksc = KieServerClient.getInstance();
+    	boolean res = ksc.sayHelloWorld();
+    	StatusMessage sm = new StatusMessage();
+    	sm.setMessage("Creating container helloworld");
+    	if (res) {
+    		sm.setStatus("OK");
+    	}
+    	else {
+    		sm.setStatus("FAIL");
+    	}
+    	return sm;
     }
 }

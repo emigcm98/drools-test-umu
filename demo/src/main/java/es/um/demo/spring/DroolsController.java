@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.um.demo.drools_cli.DroolsClient;
+import es.um.demo.drools_cli.KieServerClient;
 import es.um.demo.models.data.CapabilitiesJSON;
 import es.um.demo.models.data.ContainerJSON;
 import es.um.demo.models.data.DroolsShop;
@@ -140,6 +141,21 @@ public class DroolsController {
     	
     	return sm;
     	
+    }
+    
+    @GetMapping("helloworld")
+    public StatusMessage helloworld() {
+    	DroolsClient dc = DroolsClient.getInstance();
+    	boolean res = dc.sayHelloWorld();
+    	StatusMessage sm = new StatusMessage();
+    	sm.setMessage("Creating container helloworld");
+    	if (res) {
+    		sm.setStatus("OK");
+    	}
+    	else {
+    		sm.setStatus("FAIL");
+    	}
+    	return sm;
     }
 
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<kmodule xmlns="http://jboss.org/kie/6.0.0/kmodule">
+<kmodule xmlns="http://www.drools.org/xsd/kmodule">
     <kbase name="rules" packages="es.um.demo.rules">
         <ksession name="ksession-rules"/>
     </kbase>
@@ -8,5 +8,8 @@
     </kbase>
     <kbase name="process" packages="es.um.demo.process">
         <ksession name="ksession-process"/>
+    </kbase>
+    <kbase name="helloworld" packages="es.um.demo.models.prueba">
+        <ksession name="HelloWorldKS"/>
     </kbase>
 </kmodule>

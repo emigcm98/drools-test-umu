@@ -4,9 +4,15 @@ import lombok.Data;
 
 @Data
 public class StatusMessage {
+	
+	enum Status {
+		OK,
+		FAIL
+	}
+	
 	private String message;
 	private String status;
-	private String stacktrace;
+	private Status stacktrace;
 	
 	public StatusMessage() {
 	}
@@ -27,11 +33,11 @@ public class StatusMessage {
 		this.status = status;
 	}
 	
-	public String getStacktrace() {
+	public Status getStacktrace() {
 		return stacktrace;
 	}
 
-	public void setStacktrace(String stacktrace) {
+	public void setStacktrace(Status stacktrace) {
 		this.stacktrace = stacktrace;
 	}
 	

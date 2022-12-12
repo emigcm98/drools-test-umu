@@ -5,11 +5,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.drools.modelcompiler.builder.KieBaseBuilder;
+import org.kie.api.KieServices;
+import org.kie.api.runtime.KieContainer;
+import org.kie.api.runtime.KieSession;
 import org.kie.server.api.marshalling.MarshallingFormat;
 import org.kie.server.api.model.KieContainerResource;
 import org.kie.server.api.model.KieContainerResourceList;
 import org.kie.server.api.model.KieServerInfo;
 import org.kie.server.api.model.KieServiceResponse.ResponseType;
+import org.kie.server.api.model.ReleaseId;
 import org.kie.server.api.model.ServiceResponse;
 import org.kie.server.client.KieServicesClient;
 import org.kie.server.client.KieServicesConfiguration;
@@ -142,4 +147,29 @@ public class KieServerClient {
 	    
 	    return sb.toString();
 	}
+	
+	public boolean sayHelloWorld() {
+		
+//		KieServices ks = KieServices.Factory.get();
+//		KieContainer kc = ks.getKieClasspathContainer();
+//		System.out.println(kc);
+//		
+//		KieSession ksession = kc.newKieSession("HelloWorldKS");
+		
+		
+		
+		
+		KieContainerResource kcr = new KieContainerResource(new ReleaseId("es.um.demo", "helloworld", "1.0.1"));
+		kcr.setContainerAlias("helloworld!");
+		
+		ServiceResponse<KieContainerResource> sr = kieServicesClient.createContainer("helloworld-id", kcr);
+		if (sr.getType() == ResponseType.SUCCESS) {
+			return true;
+		}
+		else {
+			System.out.println(sr.getMsg());
+			return false;
+		}
+	}
+	
 }

@@ -27,17 +27,17 @@ public class DroolsController {
  
     @GetMapping("container/create")
     public ContainerJSON get_container_id() {
-    	ContainerJSON cj = new ContainerJSON("es.um.testing", "prueba", "1.0.1-SNAPSHOT", "testing-container-id", "testing-container");
+    	ContainerJSON json_create_container = new ContainerJSON("es.um.testing", "prueba", "1.0.1-SNAPSHOT", "testing-container-id", "testing-container");
         //cj.setServerTemplate(new ServerTemplateJSON("template-id", "template-name"));
-    	return cj;
+    	return json_create_container;
     }
     
     
     @PostMapping("container/create")
-    public StatusMessage createContainer(@RequestBody ContainerJSON cj) {
+    public StatusMessage createContainer(@RequestBody ContainerJSON jsonContainer) {
         
     	DroolsClient dc = DroolsClient.getInstance();
-    	boolean res = dc.createContainer(cj);
+    	boolean res = dc.createContainer(jsonContainer);
     	
     	StatusMessage sm = new StatusMessage();
     	sm.setMessage("Create container");
@@ -53,10 +53,10 @@ public class DroolsController {
     
     
     @PostMapping("template/create")
-    public StatusMessage createTemplate(@RequestBody ServerTemplateJSON st) {
+    public StatusMessage createTemplate(@RequestBody ServerTemplateJSON jsonServerTemplate) {
         
     	DroolsClient dc = DroolsClient.getInstance();
-    	boolean res = dc.createServerTemplate(st);
+    	boolean res = dc.createServerTemplate(jsonServerTemplate);
     	
     	StatusMessage sm = new StatusMessage();
     	sm.setMessage("Create container");
